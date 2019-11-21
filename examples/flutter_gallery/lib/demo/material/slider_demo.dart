@@ -67,6 +67,7 @@ class _CustomRangeThumbShape extends RangeSliderThumbShape {
     bool isEnabled = false,
     bool isOnTop,
     @required SliderThemeData sliderTheme,
+    bool showValueIndicator,
     TextDirection textDirection,
     Thumb thumb,
   }) {
@@ -415,14 +416,12 @@ class _RangeSlidersState extends State<_RangeSliders> {
                   overlayColor: Colors.black12,
                   thumbColor: Colors.deepPurple,
                   rangeThumbShape: _CustomRangeThumbShape(),
-                  showValueIndicator: ShowValueIndicator.never,
                 ),
                 child: RangeSlider(
                   values: _discreteCustomValues,
                   min: 0.0,
                   max: 200.0,
                   divisions: 5,
-                  labels: RangeLabels('${_discreteCustomValues.start.round()}', '${_discreteCustomValues.end.round()}'),
                   onChanged: (RangeValues values) {
                     setState(() {
                       _discreteCustomValues = values;
