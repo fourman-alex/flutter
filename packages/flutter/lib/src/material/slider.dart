@@ -485,7 +485,6 @@ class _SliderState extends State<Slider> with TickerProviderStateMixin {
   static const SliderComponentShape _defaultOverlayShape = RoundSliderOverlayShape();
   static const SliderComponentShape _defaultThumbShape = RoundSliderThumbShape();
   static const SliderComponentShape _defaultValueIndicatorShape = PaddleSliderValueIndicatorShape();
-  static const ShowValueIndicator _defaultShowValueIndicator = ShowValueIndicator.onlyForDiscrete;
 
   @override
   Widget build(BuildContext context) {
@@ -542,7 +541,6 @@ class _SliderState extends State<Slider> with TickerProviderStateMixin {
       thumbShape: sliderTheme.thumbShape ?? _defaultThumbShape,
       overlayShape: sliderTheme.overlayShape ?? _defaultOverlayShape,
       valueIndicatorShape: sliderTheme.valueIndicatorShape ?? _defaultValueIndicatorShape,
-      showValueIndicator: sliderTheme.showValueIndicator ?? _defaultShowValueIndicator,
       valueIndicatorTextStyle: sliderTheme.valueIndicatorTextStyle ?? theme.textTheme.body2.copyWith(
         color: theme.colorScheme.onPrimary,
       ),
@@ -870,22 +868,7 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
   }
 
   bool get showValueIndicator {
-    bool showValueIndicator;
-    switch (_sliderTheme.showValueIndicator) {
-      case ShowValueIndicator.onlyForDiscrete:
-        showValueIndicator = isDiscrete;
-        break;
-      case ShowValueIndicator.onlyForContinuous:
-        showValueIndicator = !isDiscrete;
-        break;
-      case ShowValueIndicator.always:
-        showValueIndicator = true;
-        break;
-      case ShowValueIndicator.never:
-        showValueIndicator = false;
-        break;
-    }
-    return showValueIndicator;
+    return label != null && label.isNotEmpty;
   }
 
   double get _adjustmentUnit {

@@ -430,7 +430,6 @@ class SliderThemeData extends Diagnosticable {
       rangeTrackShape: const RoundedRectRangeSliderTrackShape(),
       rangeValueIndicatorShape: const PaddleRangeSliderValueIndicatorShape(),
       valueIndicatorTextStyle: valueIndicatorTextStyle,
-      showValueIndicator: ShowValueIndicator.onlyForDiscrete,
     );
   }
 
@@ -612,7 +611,8 @@ class SliderThemeData extends Diagnosticable {
   /// By default, [showValueIndicator] is set to
   /// [ShowValueIndicator.onlyForDiscrete]. The value indicator is only shown
   /// when the thumb is being touched.
-  final ShowValueIndicator showValueIndicator;
+  @Deprecated('Avoid using [showValueIndicator] as it no longer has an effect on the value indicator. Instead, if the [lable] property is set then the value indicator will be displayed')
+  final ShowValueIndicator  showValueIndicator;
 
   /// The text style for the text on the value indicator.
   final TextStyle valueIndicatorTextStyle;
@@ -2319,7 +2319,6 @@ class RoundRangeSliderThumbShape extends RangeSliderThumbShape {
     assert(center != null);
     assert(activationAnimation != null);
     assert(sliderTheme != null);
-    assert(sliderTheme.showValueIndicator != null);
     assert(sliderTheme.overlappingShapeStrokeColor != null);
     assert(enableAnimation != null);
     final Canvas canvas = context.canvas;

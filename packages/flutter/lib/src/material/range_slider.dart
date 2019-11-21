@@ -526,7 +526,6 @@ class _RangeSliderState extends State<RangeSlider> with TickerProviderStateMixin
   static const SliderComponentShape _defaultOverlayShape = RoundSliderOverlayShape();
   static const RangeSliderThumbShape _defaultThumbShape = RoundRangeSliderThumbShape();
   static const RangeSliderValueIndicatorShape _defaultValueIndicatorShape = PaddleRangeSliderValueIndicatorShape();
-  static const ShowValueIndicator _defaultShowValueIndicator = ShowValueIndicator.onlyForDiscrete;
   static const double _defaultMinThumbSeparation = 8;
 
   @override
@@ -563,7 +562,6 @@ class _RangeSliderState extends State<RangeSlider> with TickerProviderStateMixin
       rangeThumbShape: sliderTheme.rangeThumbShape ?? _defaultThumbShape,
       overlayShape: sliderTheme.overlayShape ?? _defaultOverlayShape,
       rangeValueIndicatorShape: sliderTheme.rangeValueIndicatorShape ?? _defaultValueIndicatorShape,
-      showValueIndicator: sliderTheme.showValueIndicator ?? _defaultShowValueIndicator,
       valueIndicatorTextStyle: sliderTheme.valueIndicatorTextStyle ?? theme.textTheme.body2.copyWith(
         color: theme.colorScheme.onPrimary,
       ),
@@ -876,22 +874,7 @@ class _RenderRangeSlider extends RenderBox with RelayoutWhenSystemFontsChangeMix
   }
 
   bool get showValueIndicator {
-    bool showValueIndicator;
-    switch (_sliderTheme.showValueIndicator) {
-      case ShowValueIndicator.onlyForDiscrete:
-        showValueIndicator = isDiscrete;
-        break;
-      case ShowValueIndicator.onlyForContinuous:
-        showValueIndicator = !isDiscrete;
-        break;
-      case ShowValueIndicator.always:
-        showValueIndicator = true;
-        break;
-      case ShowValueIndicator.never:
-        showValueIndicator = false;
-        break;
-    }
-    return showValueIndicator;
+    return labels != null && labels.start != null && labels.start.isNotEmpty && labels.end != null && labels.end.isNotEmpty;
   }
 
   Size get _thumbSize => _sliderTheme.rangeThumbShape.getPreferredSize(isEnabled, isDiscrete);
