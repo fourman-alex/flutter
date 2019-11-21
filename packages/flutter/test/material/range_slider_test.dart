@@ -1395,7 +1395,6 @@ void main() {
         sliderTheme: const SliderThemeData(
           valueIndicatorColor: Color(0xff000001),
           overlappingShapeStrokeColor: Color(0xff000002),
-          showValueIndicator: ShowValueIndicator.always,
         ),
     );
     final SliderThemeData sliderTheme = theme.sliderTheme;
@@ -1469,7 +1468,6 @@ void main() {
         sliderTheme: const SliderThemeData(
           valueIndicatorColor: Color(0xff000001),
           overlappingShapeStrokeColor: Color(0xff000002),
-          showValueIndicator: ShowValueIndicator.always,
         ),
     );
     final SliderThemeData sliderTheme = theme.sliderTheme;

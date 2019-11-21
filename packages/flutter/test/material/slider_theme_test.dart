@@ -56,7 +56,6 @@ void main() {
       rangeThumbShape: RoundRangeSliderThumbShape(),
       rangeTrackShape: RoundedRectRangeSliderTrackShape(),
       rangeValueIndicatorShape: PaddleRangeSliderValueIndicatorShape(),
-      showValueIndicator: ShowValueIndicator.always,
       valueIndicatorTextStyle: TextStyle(color: Colors.black),
     ).debugFillProperties(builder);
 
@@ -89,7 +88,6 @@ void main() {
       'rangeThumbShape: Instance of \'RoundRangeSliderThumbShape\'',
       'rangeTrackShape: Instance of \'RoundedRectRangeSliderTrackShape\'',
       'rangeValueIndicatorShape: Instance of \'PaddleRangeSliderValueIndicatorShape\'',
-      'showValueIndicator: always',
       'valueIndicatorTextStyle: TextStyle(inherit: true, color: Color(0xff000000))',
     ]);
   });
@@ -364,7 +362,7 @@ void main() {
       platform: TargetPlatform.android,
       primarySwatch: Colors.blue,
     );
-    final SliderThemeData sliderTheme = theme.sliderTheme.copyWith(thumbColor: Colors.red.shade500, showValueIndicator: ShowValueIndicator.always);
+    final SliderThemeData sliderTheme = theme.sliderTheme.copyWith(thumbColor: Colors.red.shade500);
     Widget buildApp(String value, { double sliderValue = 0.5, double textScale = 1.0 }) {
       return Directionality(
         textDirection: TextDirection.ltr,
@@ -681,7 +679,6 @@ void main() {
         overlayShape: SliderComponentShape.noOverlay,
         thumbShape: SliderComponentShape.noThumb,
         tickMarkShape: SliderTickMarkShape.noTickMark,
-        showValueIndicator: ShowValueIndicator.never,
       ),
       value: 0.5,
       divisions: 4,
@@ -699,7 +696,6 @@ void main() {
         overlayShape: SliderComponentShape.noOverlay,
         thumbShape: SliderComponentShape.noThumb,
         tickMarkShape: SliderTickMarkShape.noTickMark,
-        showValueIndicator: ShowValueIndicator.never,
       ),
       value: 0.5,
       divisions: 4,
@@ -720,7 +716,6 @@ void main() {
         trackHeight: 0,
         overlayShape: SliderComponentShape.noOverlay,
         thumbShape: SliderComponentShape.noThumb,
-        showValueIndicator: ShowValueIndicator.never,
         // When the track is hidden to 0 height, a tick mark radius
         // must be provided to get a non-zero radius.
         tickMarkShape: const RoundSliderTickMarkShape(tickMarkRadius: 1),
@@ -744,7 +739,6 @@ void main() {
         trackHeight: 0,
         overlayShape: SliderComponentShape.noOverlay,
         tickMarkShape: SliderTickMarkShape.noTickMark,
-        showValueIndicator: ShowValueIndicator.never,
       ),
       value: 0.5,
       divisions: 4,
@@ -765,7 +759,6 @@ void main() {
         trackHeight: 0,
         thumbShape: SliderComponentShape.noThumb,
         tickMarkShape: SliderTickMarkShape.noTickMark,
-        showValueIndicator: ShowValueIndicator.never,
       ),
       value: 0.5,
       divisions: 4,
@@ -794,10 +787,10 @@ void main() {
         overlayShape: SliderComponentShape.noOverlay,
         thumbShape: SliderComponentShape.noThumb,
         tickMarkShape: SliderTickMarkShape.noTickMark,
-        showValueIndicator: ShowValueIndicator.always,
       ),
       value: 0.5,
       divisions: 4,
+      showLabel: true
     ));
 
     final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(Slider));
@@ -823,11 +816,11 @@ void main() {
         overlayShape: SliderComponentShape.noOverlay,
         thumbShape: SliderComponentShape.noThumb,
         tickMarkShape: SliderTickMarkShape.noTickMark,
-        showValueIndicator: ShowValueIndicator.always,
         rangeValueIndicatorShape: const PaddleRangeSliderValueIndicatorShape(),
       ),
       value: 0.5,
       divisions: 4,
+      showLabel: true
     ));
 
     final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(Slider));
@@ -853,6 +846,7 @@ Widget _buildApp(
   double value = 0.0,
   bool enabled = true,
   int divisions,
+  bool showLabel = false,
 }) {
   final ValueChanged<double> onChanged = enabled ? (double d) => value = d : null;
   return MaterialApp(
@@ -862,7 +856,7 @@ Widget _buildApp(
           data: sliderTheme,
           child: Slider(
             value: value,
-            label: '$value',
+            label: showLabel ? '$value' : null,
             onChanged: onChanged,
             divisions: divisions,
           ),

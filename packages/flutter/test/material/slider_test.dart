@@ -248,6 +248,7 @@ void main() {
                 child: Center(
                   child: Slider(
                     key: sliderKey,
+                    label: value.toString(),
                     value: value,
                     divisions: 4,
                     onChanged: (double newValue) {
@@ -925,7 +926,6 @@ void main() {
     Widget buildSlider({
       double textScaleFactor,
       bool isDiscrete = true,
-      ShowValueIndicator show = ShowValueIndicator.onlyForDiscrete,
     }) {
       return Directionality(
         textDirection: TextDirection.ltr,
@@ -936,7 +936,7 @@ void main() {
               child: Material(
                 child: Theme(
                   data: Theme.of(context).copyWith(
-                    sliderTheme: Theme.of(context).sliderTheme.copyWith(showValueIndicator: show),
+                    sliderTheme: Theme.of(context).sliderTheme,
                   ),
                   child: Center(
                     child: OverflowBox(
@@ -989,7 +989,6 @@ void main() {
     await tester.pumpWidget(buildSlider(
       textScaleFactor: 1.0,
       isDiscrete: false,
-      show: ShowValueIndicator.onlyForContinuous,
     ));
     center = tester.getCenter(find.byType(Slider));
     gesture = await tester.startGesture(center);
@@ -1003,7 +1002,6 @@ void main() {
     await tester.pumpWidget(buildSlider(
       textScaleFactor: 2.0,
       isDiscrete: false,
-      show: ShowValueIndicator.onlyForContinuous,
     ));
     center = tester.getCenter(find.byType(Slider));
     gesture = await tester.startGesture(center);
@@ -1340,9 +1338,9 @@ void main() {
       platform: TargetPlatform.android,
       primarySwatch: Colors.blue,
     );
-    SliderThemeData theme = baseTheme.sliderTheme;
+    final SliderThemeData theme = baseTheme.sliderTheme;
     double value = 0.45;
-    Widget buildApp({ SliderThemeData sliderTheme, int divisions, bool enabled = true }) {
+    Widget buildApp({ SliderThemeData sliderTheme, int divisions, bool enabled = true, bool showLabel }) {
       final ValueChanged<double> onChanged = enabled ? (double d) => value = d : null;
       return Directionality(
         textDirection: TextDirection.ltr,
@@ -1356,7 +1354,7 @@ void main() {
                   data: sliderTheme,
                   child: Slider(
                     value: value,
-                    label: '$value',
+                    label: showLabel ? '$value' : null,
                     divisions: divisions,
                     onChanged: onChanged,
                   ),
@@ -1373,9 +1371,10 @@ void main() {
       SliderThemeData theme,
       int divisions,
       bool enabled = true,
+      bool showLabel,
     }) async {
       // Discrete enabled widget.
-      await tester.pumpWidget(buildApp(sliderTheme: theme, divisions: divisions, enabled: enabled));
+      await tester.pumpWidget(buildApp(sliderTheme: theme, divisions: divisions, enabled: enabled, showLabel: showLabel));
       final Offset center = tester.getCenter(find.byType(Slider));
       final TestGesture gesture = await tester.startGesture(center);
       // Wait for value indicator animation to finish.
@@ -1391,32 +1390,14 @@ void main() {
       await gesture.up();
     }
 
-    // Default (showValueIndicator set to onlyForDiscrete).
-    await expectValueIndicator(isVisible: true, theme: theme, divisions: 3, enabled: true);
-    await expectValueIndicator(isVisible: false, theme: theme, divisions: 3, enabled: false);
-    await expectValueIndicator(isVisible: false, theme: theme, enabled: true);
-    await expectValueIndicator(isVisible: false, theme: theme, enabled: false);
-
-    // With showValueIndicator set to onlyForContinuous.
-    theme = theme.copyWith(showValueIndicator: ShowValueIndicator.onlyForContinuous);
-    await expectValueIndicator(isVisible: false, theme: theme, divisions: 3, enabled: true);
-    await expectValueIndicator(isVisible: false, theme: theme, divisions: 3, enabled: false);
-    await expectValueIndicator(isVisible: true, theme: theme, enabled: true);
-    await expectValueIndicator(isVisible: false, theme: theme, enabled: false);
-
-    // discrete enabled widget with showValueIndicator set to always.
-    theme = theme.copyWith(showValueIndicator: ShowValueIndicator.always);
-    await expectValueIndicator(isVisible: true, theme: theme, divisions: 3, enabled: true);
-    await expectValueIndicator(isVisible: false, theme: theme, divisions: 3, enabled: false);
-    await expectValueIndicator(isVisible: true, theme: theme, enabled: true);
-    await expectValueIndicator(isVisible: false, theme: theme, enabled: false);
-
-    // discrete enabled widget with showValueIndicator set to never.
-    theme = theme.copyWith(showValueIndicator: ShowValueIndicator.never);
-    await expectValueIndicator(isVisible: false, theme: theme, divisions: 3, enabled: true);
-    await expectValueIndicator(isVisible: false, theme: theme, divisions: 3, enabled: false);
-    await expectValueIndicator(isVisible: false, theme: theme, enabled: true);
-    await expectValueIndicator(isVisible: false, theme: theme, enabled: false);
+    await expectValueIndicator(isVisible: true, theme: theme, divisions: 3, enabled: true, showLabel: true);
+    await expectValueIndicator(isVisible: false, theme: theme, divisions: 3, enabled: false, showLabel: true);
+    await expectValueIndicator(isVisible: true, theme: theme, enabled: true, showLabel: true);
+    await expectValueIndicator(isVisible: false, theme: theme, enabled: false, showLabel: true);
+    await expectValueIndicator(isVisible: false, theme: theme, divisions: 3, enabled: true, showLabel: false);
+    await expectValueIndicator(isVisible: false, theme: theme, divisions: 3, enabled: false, showLabel: false);
+    await expectValueIndicator(isVisible: false, theme: theme, enabled: true, showLabel: false);
+    await expectValueIndicator(isVisible: false, theme: theme, enabled: false, showLabel: false);
   });
 
   testWidgets("Slider doesn't start any animations after dispose", (WidgetTester tester) async {
